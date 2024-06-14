@@ -10,4 +10,9 @@ describe('retry function', () => {
     const return10 = retry(10, 100)(() => 10)(console.error)
     expect(return10()).toBe(10)
   })
+
+  it('should succeed with a promise type', async () => {
+    const returnAwait10 = retry(10, 100)(async () => 10)(console.error)
+    expect(await returnAwait10())
+  })
 })
