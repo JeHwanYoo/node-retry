@@ -39,5 +39,5 @@ export const retry: Retry =
       )
     }
 
-    return attemptFn(0)
+    return attemptFn(1)
   }
