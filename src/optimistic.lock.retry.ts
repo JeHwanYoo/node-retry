@@ -22,22 +22,31 @@ export const retry: Retry =
       try {
         const result = fn(...args)
         if (result instanceof Promise) {
-          return result.catch(e => handleError(e, attempt))
+          return result.catch(e => handleError(e, attempt, retryPromise))
         }
         return result
       } catch (e) {
-        return handleError(e, attempt)
+        return handleError(e, attempt, retryNonPromise)
       }
     }
 
-    const handleError = (e: unknown, attempt: number) => {
+    const handleError = (
+      e: unknown,
+      attempt: number,
+      retryFn: (attempt: number) => unknown,
+    ) => {
       if (attempt === maxAttempt) {
         return backoff(e)
       }
-      return new Promise(resolve =>
+      return retryFn(attempt)
+    }
+
+    const retryPromise = (attempt: number) =>
+      new Promise(resolve =>
         setTimeout(() => resolve(attemptFn(attempt + 1)), delay),
       )
-    }
+
+    const retryNonPromise = (attempt: number) => attemptFn(attempt + 1)
 
     return attemptFn(1)
   }
