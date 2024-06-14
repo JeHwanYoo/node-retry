@@ -47,7 +47,7 @@ flowchart
     Start --> attemptFn([call attemptFn])
     attemptFn --> callFn([call fn])
     callFn --> isError{Is there any error?}
-    isError -->|Yes| isPromise
+    isError -->|Yes| isPromise{Is the return value Promise?}
     isError -->|No| End
     isPromise -->|Yes| handlePromiseError([Handle promise error])
     isPromise -->|No| handleError([Handle non-promise error])
