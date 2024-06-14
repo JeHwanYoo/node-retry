@@ -31,4 +31,17 @@ describe('retry function', () => {
     expect(await return10()).toBe(10)
     expect(spy).toHaveBeenCalledTimes(6) // retry 5 and succeed(+1)
   })
+
+  it('should retry 10 and fail', async () => {
+    const spy = vi.fn().mockImplementation(async () => {
+      throw new Error()
+    })
+
+    await expect(
+      retry(10, 100)(spy)(e => {
+        throw e
+      })(),
+    ).rejects.toThrow(Error)
+    expect(spy).toHaveBeenCalledTimes(10)
+  })
 })
