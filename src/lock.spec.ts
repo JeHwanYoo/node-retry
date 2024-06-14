@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { retry } from './optimistic.lock.retry.js'
 
 it('ok', () => {
@@ -14,5 +14,21 @@ describe('retry function', () => {
   it('should succeed with a promise type', async () => {
     const returnAwait10 = retry(10, 100)(async () => 10)(console.error)
     expect(await returnAwait10())
+  })
+
+  it('should retry 5 times and succeed', async () => {
+    let attempt = 0
+
+    const spy = vi.fn().mockImplementation(async () => {
+      if (attempt < 5) {
+        attempt++
+        throw new Error()
+      }
+      return 10
+    })
+
+    const return10 = retry(10, 100)(spy)(console.error)
+    expect(await return10()).toBe(10)
+    expect(spy).toHaveBeenCalledTimes(6) // retry 5 and succeed(+1)
   })
 })
