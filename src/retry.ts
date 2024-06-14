@@ -1,4 +1,4 @@
-import { Retry } from './optimistic.lock.retry.type.js'
+import { Retry } from './retry.type.js'
 
 /**
  *

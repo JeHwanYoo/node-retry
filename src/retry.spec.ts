@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { retry } from './optimistic.lock.retry.js'
+import { retry } from './retry.js'
 
 it('ok', () => {
   expect(true).toBeTruthy()
