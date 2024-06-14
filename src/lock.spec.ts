@@ -37,11 +37,7 @@ describe('retry function', () => {
       throw new Error()
     })
 
-    await expect(
-      retry(10, 100)(spy)(e => {
-        throw e
-      })(),
-    ).rejects.toThrow(Error)
+    await expect(retry(10, 100)(spy)(e => e)()).resolves.toBeInstanceOf(Error)
     expect(spy).toHaveBeenCalledTimes(10)
   })
 })
